@@ -2,12 +2,15 @@ package com.bautzen.senfservice.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bautzen.senfservice.model.Gericht;
 
 import jakarta.annotation.PostConstruct;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -19,12 +22,12 @@ public class SpeisekarteController {
 
     @PostConstruct
     private void erstelleListe() {
-        gerichte = List.of(
+        gerichte = new ArrayList<>(List.of(
             new Gericht("Bautzener Senfeier", 8.50, true),
             new Gericht("Sorbisches Hochzeitsessen", 14.90, false),
             new Gericht("Teichelmauke", 11.20, false),
             new Gericht("Quark mit Leinöl", 7.50, true)
-        );
+        ));
     }
 
     // Wenn jemand im Browser "localhost:8082/menue" aufruft, passiert das hier:
@@ -65,6 +68,16 @@ public class SpeisekarteController {
         // Achtung: Wenn nummer zu groß ist, stürzt es ab (IndexOutOfBounds)
         // Aber zum Testen reicht es erstmal!
         return gerichte.get(nummer);
-    }    
+    }
+    
+    // Wir nutzen hier POST statt GET
+    @PostMapping("/menue") 
+    public List<Gericht> gerichtHinzufuegen(@RequestBody Gericht neuesGericht) {
+        // Das "neuesGericht" wird automatisch aus dem JSON gebaut, das wir senden!
+        gerichte.add(neuesGericht);
+        
+        // Wir geben zur Bestätigung die neue, volle Liste zurück
+        return gerichte;
+    }
 
 }
