@@ -1,6 +1,7 @@
 package com.bautzen.senfservice.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bautzen.senfservice.model.Gericht;
@@ -56,4 +57,14 @@ public class SpeisekarteController {
         
         return teuereGerichte;
     }
+
+    // URL: /menue/0  oder /menue/2
+    @GetMapping("/menue/{nummer}")
+    public Gericht getGerichtNachNummer(@PathVariable int nummer) {
+        // Wir holen das Element an der Stelle "nummer" aus der Liste
+        // Achtung: Wenn nummer zu groß ist, stürzt es ab (IndexOutOfBounds)
+        // Aber zum Testen reicht es erstmal!
+        return gerichte.get(nummer);
+    }    
+
 }
