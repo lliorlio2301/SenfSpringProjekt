@@ -24,11 +24,6 @@ public class SpeisekarteController {
         this.senfService = senfService;
     }
 
-    @PostConstruct
-    private void erstelleListe() {
-        senfService.erstelleListe();
-    }
-
     // Wenn jemand im Browser "localhost:8082/menue" aufruft, passiert das hier:
     @GetMapping("/menue")
     public List<Gericht> holeSpeisekarte() {
