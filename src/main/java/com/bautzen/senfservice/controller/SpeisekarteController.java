@@ -4,38 +4,36 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bautzen.senfservice.model.Gericht;
+import com.bautzen.service.SenfService;
 
 import jakarta.annotation.PostConstruct;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @RestController // Sagt: "Ich bin bereit für Web-Anfragen!"
 public class SpeisekarteController {
 
-    private List<Gericht> gerichte;
+    private SenfService senfService;
+
+    public SpeisekarteController(SenfService senfService) {
+        this.senfService = senfService;
+    }
 
     @PostConstruct
     private void erstelleListe() {
-        gerichte = new ArrayList<>(List.of(
-            new Gericht("Bautzener Senfeier", 8.50, true),
-            new Gericht("Sorbisches Hochzeitsessen", 14.90, false),
-            new Gericht("Teichelmauke", 11.20, false),
-            new Gericht("Quark mit Leinöl", 7.50, true)
-        ));
+        senfService.erstelleListe();
     }
 
     // Wenn jemand im Browser "localhost:8082/menue" aufruft, passiert das hier:
     @GetMapping("/menue")
     public List<Gericht> holeSpeisekarte() {
         
-        return gerichte;
+        return senfService.getGerichte();
         // Spring Boot verwandelt diese Liste automatisch in JSON!
     }
     
@@ -46,20 +44,12 @@ public class SpeisekarteController {
 
     @GetMapping("/menue/vegetarisch")
     public List<Gericht> getVegetarischeGerichte() {
-        
-        List<Gericht> vegetarisch = gerichte.stream().filter(Gericht::istVegetarisch)
-        .collect(Collectors.toList());
-
-        return vegetarisch;
+        return senfService.getVegetarischeGerichte();
     }
 
     @GetMapping("/menue/teuer")
-    public List<Gericht> getTeuereGerichte() {
-
-        List<Gericht> teuereGerichte = gerichte.stream().filter(v -> v.getPreis() > 10)
-        .collect(Collectors.toList());
-        
-        return teuereGerichte;
+    public List<Gericht> getTeuereGerichte() {        
+        return senfService.getTeuereGerichte();
     }
 
     // URL: /menue/0  oder /menue/2
@@ -68,17 +58,15 @@ public class SpeisekarteController {
         // Wir holen das Element an der Stelle "nummer" aus der Liste
         // Achtung: Wenn nummer zu groß ist, stürzt es ab (IndexOutOfBounds)
         // Aber zum Testen reicht es erstmal!
-        return gerichte.get(nummer);
+        return senfService.getGerichtNachNummer(nummer);
     }
     
     // Wir nutzen hier POST statt GET
     @PostMapping("/menue") 
     public List<Gericht> gerichtHinzufuegen(@RequestBody Gericht neuesGericht) {
-        // Das "neuesGericht" wird automatisch aus dem JSON gebaut, das wir senden!
-        gerichte.add(neuesGericht);
-        
+        // Das "neuesGericht" wird automatisch aus dem JSON gebaut, das wir senden!        
         // Wir geben zur Bestätigung die neue, volle Liste zurück
-        return gerichte;
+        return senfService.gerichtHinzufuegen(neuesGericht);
     }
 
     @DeleteMapping("/menue/{nummer}")
@@ -86,10 +74,12 @@ public class SpeisekarteController {
         // .remove(int index) löscht das Element an dieser Stelle
         // Vorsicht: Alle nachfolgenden Elemente rutschen auf!
         // Index 1 wird dann zu Index 0.
-        if (nummer >= 0 && nummer < gerichte.size()) {
-            gerichte.remove(nummer);
-        }
-        return gerichte;
+        return senfService.gerichtLoeschen(nummer);
     }
 
+    @PutMapping("/menue/{nummer}")
+    public List<Gericht> gerichtAktualisieren(@PathVariable int nummer, @RequestBody Gericht update) {
+        // .set(index, element) tauscht das Element aus
+        return senfService.gerichtAktualisieren(nummer, update);
+    }
 }

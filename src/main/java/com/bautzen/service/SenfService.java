@@ -10,6 +10,8 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class SenfService {
@@ -20,8 +22,6 @@ public class SenfService {
         this.gerichte = gerichte;
     }
 
-    public SenfService(){}
-
     public void erstelleListe() {
         gerichte = new ArrayList<>(List.of(
             new Gericht("Bautzener Senfeier", 8.50, true),
@@ -30,6 +30,53 @@ public class SenfService {
             new Gericht("Quark mit Leinöl", 7.50, true)
         ));
     }
-    
+
+    public List<Gericht> getGerichte() {
+        return gerichte;
+    }
+
+    public void setGerichte(List<Gericht> gerichte) {
+        this.gerichte = gerichte;
+    }
+
+    public List<Gericht> getVegetarischeGerichte() {
+        
+        List<Gericht> vegetarisch = gerichte.stream().filter(Gericht::istVegetarisch)
+        .collect(Collectors.toList());
+
+        return vegetarisch;
+    }
+
+    public List<Gericht> getTeuereGerichte() {
+
+        List<Gericht> teuereGerichte = gerichte.stream().filter(v -> v.getPreis() > 10)
+        .collect(Collectors.toList());
+        
+        return teuereGerichte;
+    }
+
+    public Gericht getGerichtNachNummer(int nummer) {
+        return gerichte.get(nummer);
+    }
+
+    public List<Gericht> gerichtHinzufuegen(Gericht neuesGericht) {
+        gerichte.add(neuesGericht);
+        return gerichte;
+    }
+
+    public List<Gericht> gerichtLoeschen(int nummer) {
+
+        if (nummer >= 0 && nummer < gerichte.size()) {
+            gerichte.remove(nummer);
+        }
+        return gerichte;
+    }
+
+    public List<Gericht> gerichtAktualisieren(int nummer, Gericht update) {
+        if (nummer >= 0 && nummer < gerichte.size()) {
+            gerichte.set(nummer, update);
+        }
+        return gerichte;
+    } 
 }
 
