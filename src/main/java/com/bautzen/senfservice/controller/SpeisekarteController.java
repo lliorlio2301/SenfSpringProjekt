@@ -1,5 +1,6 @@
 package com.bautzen.senfservice.controller;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,6 +78,17 @@ public class SpeisekarteController {
         gerichte.add(neuesGericht);
         
         // Wir geben zur Bestätigung die neue, volle Liste zurück
+        return gerichte;
+    }
+
+    @DeleteMapping("/menue/{nummer}")
+    public List<Gericht> gerichtLoeschen(@PathVariable int nummer) {
+        // .remove(int index) löscht das Element an dieser Stelle
+        // Vorsicht: Alle nachfolgenden Elemente rutschen auf!
+        // Index 1 wird dann zu Index 0.
+        if (nummer >= 0 && nummer < gerichte.size()) {
+            gerichte.remove(nummer);
+        }
         return gerichte;
     }
 
