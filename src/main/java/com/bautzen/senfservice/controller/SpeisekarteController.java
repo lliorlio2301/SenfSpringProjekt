@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bautzen.senfservice.model.Gericht;
-import com.bautzen.service.SenfService;
-
-import jakarta.annotation.PostConstruct;
+import com.bautzen.senfservice.service.SenfService;
 
 import java.util.List;
+
+import org.apache.catalina.connector.Response;
+import org.springframework.http.ResponseEntity;
 
 @RestController // Sagt: "Ich bin bereit für Web-Anfragen!"
 public class SpeisekarteController {
@@ -49,11 +50,15 @@ public class SpeisekarteController {
 
     // URL: /menue/0  oder /menue/2
     @GetMapping("/menue/{nummer}")
-    public Gericht getGerichtNachNummer(@PathVariable int nummer) {
+    public ResponseEntity<Gericht> getGerichtNachNummer(@PathVariable int nummer) {
         // Wir holen das Element an der Stelle "nummer" aus der Liste
         // Achtung: Wenn nummer zu groß ist, stürzt es ab (IndexOutOfBounds)
         // Aber zum Testen reicht es erstmal!
-        return senfService.getGerichtNachNummer(nummer);
+        Gericht gericht = senfService.getGerichtNachNummer(nummer);
+        if (gericht==null) {
+            ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(gericht);
     }
     
     // Wir nutzen hier POST statt GET

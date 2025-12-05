@@ -1,4 +1,4 @@
-package com.bautzen.service;
+package com.bautzen.senfservice.service;
 
 import com.bautzen.senfservice.model.Gericht;
 
@@ -6,12 +6,10 @@ import jakarta.annotation.PostConstruct;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
+
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class SenfService {
@@ -22,13 +20,14 @@ public class SenfService {
         this.gerichte = new ArrayList<>();
     }
 
+    @PostConstruct
     public void erstelleListe() {
-        gerichte = List.of(
+        this.gerichte.addAll(List.of(
             new Gericht("Bautzener Senfeier", 8.50, true),
             new Gericht("Sorbisches Hochzeitsessen", 14.90, false),
             new Gericht("Teichelmauke", 11.20, false),
             new Gericht("Quark mit Leinöl", 7.50, true)
-        );
+        ));
     }
 
     public List<Gericht> getGerichte() {
@@ -56,7 +55,10 @@ public class SenfService {
     }
 
     public Gericht getGerichtNachNummer(int nummer) {
-        return gerichte.get(nummer);
+        if (gerichte.contains(nummer)) {
+            return gerichte.get(nummer);
+        }
+        return null;
     }
 
     public List<Gericht> gerichtHinzufuegen(Gericht neuesGericht) {
