@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import java.util.stream.Collectors;
 
@@ -54,11 +55,12 @@ public class SenfService {
         return teuereGerichte;
     }
 
-    public Gericht getGerichtNachNummer(int nummer) {
+    public Optional<Gericht> getGerichtNachNummer(int nummer) {
+        
         if (gerichte.size()>nummer && nummer >=0) {
-            return gerichte.get(nummer);
+            return Optional.of(gerichte.get(nummer));
         }
-        return null;
+        return Optional.empty();
     }
 
     public List<Gericht> gerichtHinzufuegen(Gericht neuesGericht) {

@@ -12,6 +12,7 @@ import com.bautzen.senfservice.model.Gericht;
 import com.bautzen.senfservice.service.SenfService;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
@@ -51,15 +52,9 @@ public class SpeisekarteController {
     // URL: /menue/0  oder /menue/2
     @GetMapping("/menue/{nummer}")
     public ResponseEntity<Gericht> getGerichtNachNummer(@PathVariable int nummer) {
-        // Wir holen das Element an der Stelle "nummer" aus der Liste
-        // Achtung: Wenn nummer zu groß ist, stürzt es ab (IndexOutOfBounds)
-        // Aber zum Testen reicht es erstmal!
-        Gericht gericht = senfService.getGerichtNachNummer(nummer);
-        if (gericht==null) {
-            return ResponseEntity.notFound().build();
-        } else {
-        return ResponseEntity.ok(gericht);
-        }
+        // Wenn was drin ist -> 200 OK + Inhalt
+        // Wenn leer -> 404 Not Found
+        return ResponseEntity.of(senfService.getGerichtNachNummer(nummer));
     }
     
     // Wir nutzen hier POST statt GET
