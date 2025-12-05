@@ -55,7 +55,7 @@ public class SenfService {
     }
 
     public Gericht getGerichtNachNummer(int nummer) {
-        if (gerichte.contains(nummer)) {
+        if (gerichte.size()>nummer) {
             return gerichte.get(nummer);
         }
         return null;

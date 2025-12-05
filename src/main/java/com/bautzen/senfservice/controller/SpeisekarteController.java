@@ -56,9 +56,10 @@ public class SpeisekarteController {
         // Aber zum Testen reicht es erstmal!
         Gericht gericht = senfService.getGerichtNachNummer(nummer);
         if (gericht==null) {
-            ResponseEntity.notFound().build();
-        }
+            return ResponseEntity.notFound().build();
+        } else {
         return ResponseEntity.ok(gericht);
+        }
     }
     
     // Wir nutzen hier POST statt GET
