@@ -24,7 +24,7 @@ public class TurmService {
     @PostConstruct
     public void erstelleListe(){
         this.tuerme.addAll(List.of(
-            new Turm(0, "Reichenturm", 70.8, false),
+            new Turm(0,"Reichenturm", 70.8, false),
             new Turm(1, "Lauenturm", 50.6, true),
             new Turm(2, "Alte Wasserkunst", 43.5, true),
             new Turm(3, "Nicolaiturm", 33.5, false),
@@ -43,9 +43,10 @@ public class TurmService {
         return Optional.empty();
     }
 
-    public void setNeuenTurm(String name, double  hoehe, boolean besuchbar) {
+    public void setNeuenTurm(Turm turm) {
         int id = getMaxId()+1;
-        tuerme.add(new Turm(id, name, hoehe, besuchbar));
+        turm.setId(id);
+        tuerme.add(turm);
     }
 
     public int getMaxId() {
@@ -55,6 +56,10 @@ public class TurmService {
 
     public void loeschenTurmNachId(int id) {
         tuerme.remove(id);
+    }
+
+    public List<Turm> getBesucbareTuerme() {
+        return tuerme.stream().filter(t-> t.isBesuchbar()).toList();
     }
        
 }
