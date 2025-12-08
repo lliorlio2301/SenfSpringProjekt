@@ -7,13 +7,23 @@ public class Turm {
     private double hoehe;
     private boolean besuchbar;
     
+    //Leeres Konstruktor für die Umwandlung von JSON in Java Objekten
+    public Turm(){}
+    public Turm(String name, double hoehe, boolean besuchbar) {
+        this.name = name;
+        this.hoehe = hoehe;
+        this.besuchbar = besuchbar;
+    }
+
     public Turm(int id, String name, double hoehe, boolean besuchbar) {
         this.id = id;
         this.name = name;
         this.hoehe = hoehe;
         this.besuchbar = besuchbar;
     }
-    
+
+
+
     public int getId() {
         return id;
     }
