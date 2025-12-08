@@ -55,9 +55,7 @@ public class TurmService {
     }
 
     public void loeschenTurmNachId(int id) {
-        tuerme.stream().forEach(t -> {
-            if (t.getId() == id) tuerme.remove(id);
-        });
+        tuerme.removeIf(t->t.getId()==id);
     }
 
     public List<Turm> getBesucbareTuerme() {
