@@ -1,9 +1,7 @@
 package com.bautzen.senfservice.controller;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,4 +43,14 @@ public class TurmController {
     public void deleteTurm(@PathVariable int id){
         turmService.loeschenTurmNachId(id);
     }
+
+    @GetMapping("/tuerme/besuchbar")
+    public List<Turm> getBesuchbareTuerme() {
+        //R.Entity sendet automatisch den Status-Code
+        //200 OK / 404 not Found 
+        return turmService.getBesucbareTuerme();
+    }
+
+
+
 }
