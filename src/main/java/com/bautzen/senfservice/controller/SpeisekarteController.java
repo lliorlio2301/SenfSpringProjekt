@@ -37,7 +37,7 @@ public class SpeisekarteController {
     @GetMapping("/info")
     public String hallo() {
         return "Willkommen im besten Wirtshaus der Oberlausitz!";
-    }
+    }   
 
     @GetMapping("/menue/vegetarisch")
     public List<Gericht> getVegetarischeGerichte() {
