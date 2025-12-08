@@ -37,9 +37,7 @@ public class TurmService {
     }
 
     public Optional<Turm> getTurmnachId(int id) {
-        if (id<tuerme.size() && id>=0) {
-            return Optional.of(tuerme.get(id));
-        }
+        if (id<tuerme.size() && id>=0) return tuerme.stream().filter(t->t.getId()==id).findFirst();
         return Optional.empty();
     }
 
