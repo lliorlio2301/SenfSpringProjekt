@@ -2,6 +2,7 @@ package com.bautzen.senfservice.controller;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,8 +42,10 @@ public class TurmController {
     }
 
     @DeleteMapping("/tuerme/{id}")
-    public void deleteTurm(@PathVariable int id){
-        turmService.loeschenTurmNachId(id);
+    public ResponseEntity<Void> deleteTurm(@PathVariable int id){
+        boolean ergebnis = turmService.loeschenTurmNachId(id);
+        if(ergebnis) return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build() ;
     }
 
     @GetMapping("/tuerme/besuchbar")
