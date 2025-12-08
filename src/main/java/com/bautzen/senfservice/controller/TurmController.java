@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bautzen.senfservice.model.Turm;
@@ -48,9 +49,11 @@ public class TurmController {
     public List<Turm> getBesuchbareTuerme() {
         //R.Entity sendet automatisch den Status-Code
         //200 OK / 404 not Found 
-        return turmService.getBesucbareTuerme();
+        return turmService.getBesuchbareTuerme();
     }
 
-
-
+    @GetMapping("/tuerme/hoch")
+    public List<Turm> getTuermenachHoehe(@RequestParam("minHoehe") double minHoehe) {
+        return turmService.filterTuermeNachHoehe(minHoehe);
+    }
 }

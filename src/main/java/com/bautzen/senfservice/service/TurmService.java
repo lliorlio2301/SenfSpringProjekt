@@ -58,8 +58,12 @@ public class TurmService {
         tuerme.removeIf(t->t.getId()==id);
     }
 
-    public List<Turm> getBesucbareTuerme() {
+    public List<Turm> getBesuchbareTuerme() {
         return tuerme.stream().filter(t-> t.isBesuchbar()).toList();
+    }
+
+    public List<Turm> filterTuermeNachHoehe(double minHoehe) {
+        return tuerme.stream().filter(t-> t.getHoehe()>minHoehe).toList();
     }
        
 }
