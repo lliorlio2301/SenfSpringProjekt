@@ -52,8 +52,8 @@ public class TurmService {
         return id.orElse(0);
     }
 
-    public void loeschenTurmNachId(int id) {
-        tuerme.removeIf(t->t.getId()==id);
+    public boolean  loeschenTurmNachId(int id) {
+        return tuerme.removeIf(t->t.getId()==id);
     }
 
     public List<Turm> getBesuchbareTuerme() {
