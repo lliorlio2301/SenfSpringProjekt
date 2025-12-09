@@ -1,7 +1,15 @@
 package com.bautzen.senfservice.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Turm {
 
+    @Id // Damit signalisiert man, das id der PS ist
+    @GeneratedValue(strategy= GenerationType.AUTO) //so wird es automatisch hochgezählt
     private int id;
     private String name;
     private double hoehe;
