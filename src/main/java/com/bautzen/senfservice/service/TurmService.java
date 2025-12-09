@@ -8,6 +8,7 @@ import java.util.OptionalInt;
 
 import org.springframework.stereotype.Service;
 
+import com.bautzen.repository.TurmRepository;
 import com.bautzen.senfservice.model.Turm;
 
 import jakarta.annotation.PostConstruct;
@@ -16,52 +17,48 @@ import jakarta.annotation.PostConstruct;
 public class TurmService {
 
     List<Turm> tuerme;
+    private final TurmRepository turmRepository; 
 
-    public TurmService(){
-        this.tuerme = new ArrayList<>();
+    public TurmService(TurmRepository turmRepository){
+        this.turmRepository = turmRepository;
     }
 
     @PostConstruct
     public void erstelleListe(){
-        this.tuerme.addAll(List.of(
-            new Turm(0,"Reichenturm", 70.8, false),
-            new Turm(1, "Lauenturm", 50.6, true),
-            new Turm(2, "Alte Wasserkunst", 43.5, true),
-            new Turm(3, "Nicolaiturm", 33.5, false),
-            new Turm(4, "Schülerturm", 56.3, true)
-        ));
+        if(turmRepository.count()==0){
+            turmRepository.save(new Turm("Reichenturm", 70.8, false));
+            turmRepository.save(new Turm("Lauenturm", 50.6, true));
+            turmRepository.save(new Turm("Alte Wasserkunst", 43.5, true));
+            turmRepository.save(new Turm("Nicolaiturm", 33.5, false));
+            turmRepository.save(new Turm("Schülerturm", 56.3, true));
+        }
     }
 
     public List<Turm> getTuerme() {
-        return this.tuerme;
+        return this.turmRepository.findAll();
     }
 
     public Optional<Turm> getTurmnachId(int id) {
-        if (id<tuerme.size() && id>=0) return tuerme.stream().filter(t->t.getId()==id).findFirst();
-        return Optional.empty();
+        return turmRepository.findById(id);
     }
 
     public void setNeuenTurm(Turm turm) {
-        int id = getMaxId()+1;
-        turm.setId(id);
-        tuerme.add(turm);
-    }
-
-    public int getMaxId() {
-        OptionalInt id = tuerme.stream().mapToInt(Turm::getId).max();
-        return id.orElse(0);
+        turmRepository.save(turm);    
     }
 
     public boolean  loeschenTurmNachId(int id) {
-        return tuerme.removeIf(t->t.getId()==id);
+        if(turmRepository.existsById(id)) {
+            turmRepository.deleteById(id);
+        } 
+        return false;
     }
 
     public List<Turm> getBesuchbareTuerme() {
-        return tuerme.stream().filter(t-> t.isBesuchbar()).toList();
+        return turmRepository.findByBesuchbar(true);
     }
 
     public List<Turm> filterTuermeNachHoehe(double minHoehe) {
-        return tuerme.stream().filter(t-> t.getHoehe()>minHoehe).toList();
+        return turmRepository.findByHoeheGreaterThan(minHoehe);
     }
        
 }
