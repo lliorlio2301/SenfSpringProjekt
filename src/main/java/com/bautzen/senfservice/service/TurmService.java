@@ -1,15 +1,13 @@
 package com.bautzen.senfservice.service;
 
-import java.lang.classfile.ClassFile;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 
 import org.springframework.stereotype.Service;
 
-import com.bautzen.repository.TurmRepository;
+import com.bautzen.senfservice.model.Bewertung;
 import com.bautzen.senfservice.model.Turm;
+import com.bautzen.senfservice.repository.TurmRepository;
 
 import jakarta.annotation.PostConstruct;
 
@@ -25,12 +23,20 @@ public class TurmService {
 
     @PostConstruct
     public void erstelleListe(){
-        if(turmRepository.count()==0){
-            turmRepository.save(new Turm("Reichenturm", 70.8, false));
-            turmRepository.save(new Turm("Lauenturm", 50.6, true));
-            turmRepository.save(new Turm("Alte Wasserkunst", 43.5, true));
-            turmRepository.save(new Turm("Nicolaiturm", 33.5, false));
-            turmRepository.save(new Turm("Schülerturm", 56.3, true));
+        if (turmRepository.count() == 0) {
+            // Erst den Turm erstellen
+            Turm reichenturm = new Turm("Reichenturm", 56.0, true);
+            
+            // Dann Bewertungen erstellen (und den Turm mitgeben!)
+            Bewertung b1 = new Bewertung("Super Ausblick über Bautzen!", 5, reichenturm);
+            Bewertung b2 = new Bewertung("Viele Treppen, aber lohnt sich.", 4, reichenturm);
+
+            // Die Bewertungen in die Liste des Turms packen
+            reichenturm.getBewertungen().add(b1);
+            reichenturm.getBewertungen().add(b2);
+
+            // Speichern (Dank CascadeType.ALL werden die Bewertungen automatisch mitgespeichert!)
+            turmRepository.save(reichenturm);
         }
     }
 
