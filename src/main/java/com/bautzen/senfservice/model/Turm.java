@@ -22,7 +22,7 @@ public class Turm {
     private boolean besuchbar;
 
     @OneToMany(mappedBy="turm", cascade=CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
-    private List<Bewertung> bewertungen;
+    private List<Bewertung> bewertungen = new ArrayList<>();
     
     //Leeres Konstruktor für die Umwandlung von JSON in Java Objekten
     //ArrayList wird erstellt am Anfang    
@@ -34,17 +34,12 @@ public class Turm {
         this.besuchbar = besuchbar;
     }
 
-    //Konstruktor für die erste Erstellung von Tabellen - ohne Bewertung, da diese nachher abgegeben werden
+    //Konstruktor für die erste Erstellung von Tabellen
     public Turm(int id, String name, double hoehe, boolean besuchbar) {
         this.id = id;
         this.name = name;
         this.hoehe = hoehe;
         this.besuchbar = besuchbar;
-        this.bewertungen = new ArrayList<>();
-    }
-
-    public void bewertungEintragen(Bewertung bewertung){
-        this.bewertungen.add(bewertung);
     }
 
     public int getId() {
@@ -70,5 +65,13 @@ public class Turm {
     }
     public void setBesuchbar(boolean besuchbar) {
         this.besuchbar = besuchbar;
+    }
+
+    public List<Bewertung> getBewertungen() {
+        return bewertungen;
+    }
+
+    public void setBewertungen(List<Bewertung> bewertungen) {
+        this.bewertungen = bewertungen;
     }
 }
