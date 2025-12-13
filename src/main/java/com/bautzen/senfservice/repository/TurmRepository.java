@@ -1,4 +1,4 @@
-package com.bautzen.repository;
+package com.bautzen.senfservice.repository;
 
 import com.bautzen.senfservice.model.Turm;
 import org.springframework.data.jpa.repository.JpaRepository;
